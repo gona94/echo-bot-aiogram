@@ -1,0 +1,21 @@
+# Кэш байткода Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Секреты и локальные настройки
+.env
+
+# Логи
+*.log
+
+# IDE / ОС
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
