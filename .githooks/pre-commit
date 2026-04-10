@@ -1,0 +1,4 @@
+#!/bin/sh
+# Локальный pre-commit: блокирует коммит, если в staged есть секреты.
+
+python scripts/check_secrets.py
