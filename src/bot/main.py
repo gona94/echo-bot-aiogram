@@ -11,6 +11,7 @@ from src.bot.routers.echo import create_echo_router
 from src.bot.services.chat_mode_service import ChatModeService
 from src.bot.services.echo_service import EchoService
 from src.bot.services.openrouter_service import OpenRouterService
+from src.bot.services.rate_limit_service import RateLimitService
 
 
 async def main() -> None:
@@ -28,12 +29,18 @@ async def main() -> None:
 
     echo_service = EchoService()
     chat_mode_service = ChatModeService()
+    rate_limit_service = RateLimitService(min_interval_seconds=1.0)
     openrouter_service = OpenRouterService(
         api_key=config.openrouter_api_key,
         model=config.openrouter_model,
     )
     dispatcher.include_router(
-        create_echo_router(echo_service, chat_mode_service, openrouter_service)
+        create_echo_router(
+            echo_service,
+            chat_mode_service,
+            openrouter_service,
+            rate_limit_service,
+        )
     )
 
     await dispatcher.start_polling(bot)

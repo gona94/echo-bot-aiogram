@@ -10,7 +10,7 @@ def test_build_start_message_returns_expected_text() -> None:
 
     assert (
         result
-        == "Привет! Напиши любое сообщение — я повторю его текст. Для режима LLM отправь команду /chatgpt."
+        == "Привет! Напиши любое сообщение — я повторю его текст. Для режима LLM отправь команду /chatgpt, для возврата — /echo."
     )
 
 

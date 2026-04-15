@@ -10,7 +10,7 @@ class EchoService:
         """Текст приветствия для команды /start."""
         return (
             "Привет! Напиши любое сообщение — я повторю его текст. "
-            "Для режима LLM отправь команду /chatgpt."
+            "Для режима LLM отправь команду /chatgpt, для возврата — /echo."
         )
 
     def build_echo_message(self, text: str | None) -> str:
