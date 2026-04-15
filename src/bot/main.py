@@ -12,6 +12,7 @@ from src.bot.services.chat_mode_service import ChatModeService
 from src.bot.services.echo_service import EchoService
 from src.bot.services.openrouter_service import OpenRouterService
 from src.bot.services.rate_limit_service import RateLimitService
+from src.bot.services.stale_message_service import StaleMessageService
 
 
 async def main() -> None:
@@ -30,6 +31,7 @@ async def main() -> None:
     echo_service = EchoService()
     chat_mode_service = ChatModeService()
     rate_limit_service = RateLimitService(min_interval_seconds=1.0)
+    stale_message_service = StaleMessageService(max_age_seconds=20)
     openrouter_service = OpenRouterService(
         api_key=config.openrouter_api_key,
         model=config.openrouter_model,
@@ -40,6 +42,7 @@ async def main() -> None:
             chat_mode_service,
             openrouter_service,
             rate_limit_service,
+            stale_message_service,
         )
     )
 

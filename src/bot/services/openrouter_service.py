@@ -33,23 +33,46 @@ class OpenRouterService:
     def _is_realtime_query(self, user_text: str) -> bool:
         """Определяет запросы, где нужны актуальные данные из внешних источников."""
         lowered = user_text.lower()
-        realtime_markers = (
+        weather_markers = (
             "погод",
             "температур",
-            "курс",
+            "weather",
+        )
+        news_markers = (
+            "новост",
+            "news",
+        )
+        finance_markers = (
+            "курс валют",
+            "курс доллара",
+            "курс евро",
+            "exchange rate",
+            "currency rate",
             "доллар",
             "евро",
             "биткоин",
             "btc",
-            "новост",
-            "сегодня",
-            "сейчас",
-            "weather",
             "rate",
             "rates",
-            "news",
         )
-        return any(marker in lowered for marker in realtime_markers)
+        time_markers = ("сегодня", "сейчас", "прямо сейчас", "на сегодня", "now", "today")
+        educational_markers = (
+            "план курса",
+            "курс по",
+            "урок",
+            "уроки",
+            "обучени",
+            "программа",
+        )
+
+        if any(marker in lowered for marker in educational_markers):
+            return False
+
+        has_weather_or_news = any(marker in lowered for marker in weather_markers + news_markers)
+        has_finance = any(marker in lowered for marker in finance_markers)
+        has_time_context = any(marker in lowered for marker in time_markers)
+
+        return has_weather_or_news or (has_finance and has_time_context)
 
     def _ask_sync(self, user_text: str) -> str:
         payload = {

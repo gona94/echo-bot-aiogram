@@ -74,3 +74,21 @@ def test_ask_returns_realtime_template_for_weather_query() -> None:
 
     result = service._is_realtime_query("Какая погода сегодня в Тель-Авиве?")
     assert result is True
+
+
+def test_realtime_detector_ignores_education_course_query() -> None:
+    """Слово 'курс' в контексте обучения не должно считаться live-запросом."""
+    service = OpenRouterService(api_key="test-key", model="openai/gpt-4o-mini")
+
+    result = service._is_realtime_query(
+        "Напиши план курса по английскому языку для начинающих, 30 уроков."
+    )
+    assert result is False
+
+
+def test_realtime_detector_detects_currency_rate_with_time_context() -> None:
+    """Запрос курса валюты на сегодня должен считаться live-запросом."""
+    service = OpenRouterService(api_key="test-key", model="openai/gpt-4o-mini")
+
+    result = service._is_realtime_query("Какой курс доллара сегодня?")
+    assert result is True
