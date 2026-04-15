@@ -25,6 +25,11 @@ def create_echo_router(
         """Ответ на команду /start."""
         await message.answer(echo_service.build_start_message())
 
+    @router.message(Command("help"))
+    async def cmd_help(message: Message) -> None:
+        """Показывает пользователю список доступных команд и ограничений."""
+        await message.answer(echo_service.build_help_message())
+
     @router.message(Command("chatgpt"))
     async def cmd_chatgpt(message: Message) -> None:
         """Включает режим ChatGPT для текущего пользователя."""

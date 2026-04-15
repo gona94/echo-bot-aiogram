@@ -66,3 +66,11 @@ def test_ask_sync_returns_friendly_message_for_401(monkeypatch: MonkeyPatch) -> 
 
     result = service._ask_sync("Привет")
     assert result == "Не удалось обратиться к OpenRouter: проверьте API-ключ."
+
+
+def test_ask_returns_realtime_template_for_weather_query() -> None:
+    """Запросы про актуальные данные должны получать честный шаблон."""
+    service = OpenRouterService(api_key="test-key", model="openai/gpt-4o-mini")
+
+    result = service._is_realtime_query("Какая погода сегодня в Тель-Авиве?")
+    assert result is True

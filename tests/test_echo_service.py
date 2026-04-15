@@ -10,8 +10,18 @@ def test_build_start_message_returns_expected_text() -> None:
 
     assert (
         result
-        == "Привет! Напиши любое сообщение — я повторю его текст. Для режима LLM отправь команду /chatgpt, для возврата — /echo."
+        == "Привет! Напиши любое сообщение — я повторю его текст. Для режима LLM отправь команду /chatgpt, для возврата — /echo. Список команд: /help."
     )
+
+
+def test_build_help_message_contains_main_commands() -> None:
+    """Справка должна включать ключевые команды управления режимом."""
+    service = EchoService()
+    result = service.build_help_message()
+
+    assert "/help" in result
+    assert "/chatgpt" in result
+    assert "/echo" in result
 
 
 def test_build_echo_message_returns_trimmed_text() -> None:
