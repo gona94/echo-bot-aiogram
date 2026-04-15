@@ -1,6 +1,6 @@
 """Сервис с бизнес-логикой эхо-бота."""
 
-from src.bot.utils.message_utils import is_text_message
+from src.bot.utils.message_utils import is_text_message, parse_integer_text
 
 
 class EchoService:
@@ -8,10 +8,19 @@ class EchoService:
 
     def build_start_message(self) -> str:
         """Текст приветствия для команды /start."""
-        return "Привет! Напиши любое сообщение — я повторю его текст."
+        return (
+            "Привет! Напиши любое сообщение — я повторю его текст. "
+            "Для режима LLM отправь команду /chatgpt."
+        )
 
     def build_echo_message(self, text: str | None) -> str:
         """Возвращает текст-ответ для входящего сообщения."""
         if not is_text_message(text):
             return "Я пока умею повторять только текстовые сообщения."
-        return text.strip()
+
+        normalized_text = text.strip()
+        parsed_number = parse_integer_text(normalized_text)
+        if parsed_number is not None:
+            return str(parsed_number + 1)
+
+        return normalized_text

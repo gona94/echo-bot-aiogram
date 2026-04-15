@@ -40,7 +40,11 @@ pip install -r requirements.txt
 
 ```env
 BOT_TOKEN=ваш_реальный_токен
+OPENROUTER_API_KEY=ваш_openrouter_api_key
+OPENROUTER_MODEL=openai/gpt-4o-mini
 ```
+
+`OPENROUTER_MODEL` можно не указывать: по умолчанию используется `openai/gpt-4o-mini`.
 
 ## Запуск
 
@@ -57,6 +61,19 @@ python -m src.bot.main
 ```bash
 python bot.py
 ```
+
+## Тестирование
+
+Запуск тестов:
+
+```bash
+pytest
+```
+
+## Режим ChatGPT
+
+- Отправьте команду `/chatgpt`, чтобы включить режим LLM-ответов через OpenRouter.
+- После включения бот отвечает как ассистент на все ваши текстовые сообщения.
 
 ## Правила работы с секретами
 
