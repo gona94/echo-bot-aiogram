@@ -53,9 +53,7 @@ def create_echo_router(
         """Ответ на команду /start."""
         if stale_message_service.is_stale(message.date):
             return
-        async with ChatActionSender.typing(bot=message.bot, chat_id=message.chat.id):
-            start_text = echo_service.build_start_message()
-        await message.answer(start_text)
+        await message.answer(echo_service.build_start_message())
 
     @router.message(Command("help"))
     async def cmd_help(message: Message) -> None:
@@ -75,9 +73,7 @@ def create_echo_router(
             return
 
         chat_mode_service.enable(message.from_user.id)
-        async with ChatActionSender.typing(bot=message.bot, chat_id=message.chat.id):
-            response_text = "Режим ChatGPT включен. Теперь я отвечаю как LLM через OpenRouter."
-        await message.answer(response_text)
+        await message.answer("Режим ChatGPT включен. Теперь я отвечаю как LLM через OpenRouter.")
 
     @router.message(Command("echo"))
     async def cmd_echo(message: Message) -> None:
@@ -88,9 +84,7 @@ def create_echo_router(
             return
 
         chat_mode_service.disable(message.from_user.id)
-        async with ChatActionSender.typing(bot=message.bot, chat_id=message.chat.id):
-            response_text = "Режим ChatGPT выключен. Снова работаю как обычный эхо-бот."
-        await message.answer(response_text)
+        await message.answer("Режим ChatGPT выключен. Снова работаю как обычный эхо-бот.")
 
     @router.message()
     async def echo_all(message: Message) -> None:
@@ -122,8 +116,6 @@ def create_echo_router(
             await message.answer(trim_for_telegram(llm_answer))
             return
 
-        async with ChatActionSender.typing(bot=message.bot, chat_id=message.chat.id):
-            echo_answer = echo_service.build_echo_message(message.text)
-        await message.answer(echo_answer)
+        await message.answer(echo_service.build_echo_message(message.text))
 
     return router
