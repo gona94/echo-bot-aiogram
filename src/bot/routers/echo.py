@@ -65,7 +65,13 @@ def create_echo_router(
             return
 
         if message.from_user and chat_mode_service.is_enabled(message.from_user.id):
-            async with ChatActionSender.typing(bot=message.bot, chat_id=message.chat.id):
+            # Отправляем typing сразу и поддерживаем его, пока ждем ответ LLM.
+            await message.bot.send_chat_action(chat_id=message.chat.id, action="typing")
+            async with ChatActionSender.typing(
+                bot=message.bot,
+                chat_id=message.chat.id,
+                interval=2.0,
+            ):
                 llm_answer = await openrouter_service.ask(message.text or "")
             await message.answer(trim_for_telegram(llm_answer))
             return
