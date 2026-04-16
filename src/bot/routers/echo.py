@@ -30,6 +30,12 @@ def create_echo_router(
     """Создает роутер и подключает обработчики с внедренным сервисом."""
     router = Router()
 
+    def _dialog_mode_key(message: Message) -> int:
+        """Возвращает ключ режима: пользователь или чат, если пользователь недоступен."""
+        if message.from_user is not None:
+            return message.from_user.id
+        return message.chat.id
+
     async def _run_with_typing(message: Message, coro: Awaitable[T]) -> T:
         """Поддерживает индикатор typing, пока выполняется операция."""
         async def _typing_loop() -> None:
@@ -69,10 +75,8 @@ def create_echo_router(
         """Включает режим ChatGPT для текущего пользователя."""
         if stale_message_service.is_stale(message.date):
             return
-        if message.from_user is None:
-            return
 
-        chat_mode_service.enable(message.from_user.id)
+        chat_mode_service.enable(_dialog_mode_key(message))
         await message.answer("Режим ChatGPT включен. Теперь я отвечаю как LLM через OpenRouter.")
 
     @router.message(Command("echo"))
@@ -80,10 +84,8 @@ def create_echo_router(
         """Выключает режим ChatGPT и возвращает обычный эхо-режим."""
         if stale_message_service.is_stale(message.date):
             return
-        if message.from_user is None:
-            return
 
-        chat_mode_service.disable(message.from_user.id)
+        chat_mode_service.disable(_dialog_mode_key(message))
         await message.answer("Режим ChatGPT выключен. Снова работаю как обычный эхо-бот.")
 
     @router.message()
@@ -95,7 +97,7 @@ def create_echo_router(
             await message.answer("Слишком часто. Подожди секунду и отправь сообщение снова.")
             return
 
-        if message.from_user and chat_mode_service.is_enabled(message.from_user.id):
+        if chat_mode_service.is_enabled(_dialog_mode_key(message)):
             progress_message: Message | None = None
             try:
                 progress_message = await message.answer("⏳ Думаю над ответом...")

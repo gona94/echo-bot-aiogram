@@ -31,7 +31,8 @@ async def main() -> None:
     echo_service = EchoService()
     chat_mode_service = ChatModeService()
     rate_limit_service = RateLimitService(min_interval_seconds=1.0)
-    stale_message_service = StaleMessageService(max_age_seconds=20)
+    # Даем запас на кратковременные сетевые обрывы, чтобы команды не терялись.
+    stale_message_service = StaleMessageService(max_age_seconds=120)
     openrouter_service = OpenRouterService(
         api_key=config.openrouter_api_key,
         model=config.openrouter_model,
