@@ -9,6 +9,6 @@ build:
   useCache: true
 run:
   persistenceMount: /data
-  scriptName: app.py
+  scriptName: scriptName = bot.py
   containerPort: 80
   servicePort: 80
